@@ -254,7 +254,7 @@ function connectSignal() {
 }
 
 async function sendCallSignal(payload) {
-  const target = selectedContactFullPhone || currentPeer;
+  const target = currentPeer || selectedContactFullPhone;
   if (!target || !socket || socket.readyState !== WebSocket.OPEN) return;
   socket.send(JSON.stringify({ type: 'call-signal', to: target, payload }));
 }
