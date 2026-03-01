@@ -29,6 +29,9 @@ const sessionStore = new Map();
 const wsClientsByPhone = new Map();
 const usersMemory = new Map(); // fullPhone -> user
 const contactsMemory = new Map(); // ownerFullPhone -> Set<contactFullPhone>
+const eventsMemory = [];
+
+const MAX_MEMORY_EVENTS = 500;
 
 let eventsCollection;
 let usersCollection;
@@ -51,6 +54,12 @@ function sendJson(socket, payload) {
 }
 
 async function persistEvent(event) {
+  const memoryEvent = { ...event, timestamp: new Date().toISOString() };
+  eventsMemory.unshift(memoryEvent);
+  if (eventsMemory.length > MAX_MEMORY_EVENTS) {
+    eventsMemory.length = MAX_MEMORY_EVENTS;
+  }
+
   if (!eventsCollection) return;
   try {
     await eventsCollection.insertOne({ ...event, timestamp: new Date() });
@@ -287,6 +296,10 @@ app.get('/activity', async (req, res) => {
       .sort({ timestamp: -1 })
       .limit(50)
       .toArray();
+  } else {
+    events = eventsMemory
+      .filter((event) => event.actor === session.fullPhone || event.from === session.fullPhone || event.to === session.fullPhone)
+      .slice(0, 50);
   }
 
   res.json({ ok: true, events });
