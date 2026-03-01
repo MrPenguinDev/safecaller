@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp Web Layout Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <main class="app-shell">
+      <aside class="sidebar">
+        <header class="profile-bar glass">
+          <div class="avatar online">SC</div>
+          <div class="actions">
+            <button class="icon-btn pulse" title="Status">
+              <span>◉</span>
+            </button>
+            <button class="icon-btn" title="New Chat">
+              <span>✚</span>
+            </button>
+            <button class="icon-btn" title="Menu">
+              <span>⋮</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="search-wrap glass">
+          <span class="search-icon">⌕</span>
+          <input type="text" placeholder="Search or start new chat" />
+          <button class="filter-btn" title="Filter">⛃</button>
+        </div>
+
+        <nav class="chat-filter">
+          <button class="chip active">All</button>
+          <button class="chip">Unread</button>
+          <button class="chip">Groups</button>
+          <button class="chip">Archived</button>
+        </nav>
+
+        <section class="chat-list">
+          <article class="chat-card active">
+            <div class="avatar teal">A</div>
+            <div class="chat-meta">
+              <h4>Alex Johnson</h4>
+              <p><span class="tick">✓✓</span> Let's meet at 8 PM.</p>
+            </div>
+            <div class="chat-side">
+              <time>10:24</time>
+              <span class="badge">3</span>
+            </div>
+          </article>
+
+          <article class="chat-card">
+            <div class="avatar purple">W</div>
+            <div class="chat-meta">
+              <h4>Work Squad</h4>
+              <p>Maria: Updated project deck shared.</p>
+            </div>
+            <div class="chat-side">
+              <time>09:56</time>
+              <span class="mute">🔕</span>
+            </div>
+          </article>
+
+          <article class="chat-card">
+            <div class="avatar orange">F</div>
+            <div class="chat-meta">
+              <h4>Family</h4>
+              <p>Dad: Dinner is ready 🍲</p>
+            </div>
+            <div class="chat-side">
+              <time>Yesterday</time>
+            </div>
+          </article>
+
+          <article class="chat-card">
+            <div class="avatar pink">L</div>
+            <div class="chat-meta">
+              <h4>Lisa</h4>
+              <p>Typing…</p>
+            </div>
+            <div class="chat-side">
+              <time>Yesterday</time>
+              <span class="badge muted">1</span>
+            </div>
+          </article>
+        </section>
+      </aside>
+
+      <section class="chat-window">
+        <header class="chat-header glass">
+          <div class="left">
+            <div class="avatar teal">A</div>
+            <div>
+              <h3>Alex Johnson</h3>
+              <small>online</small>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="icon-btn" title="Video">📹</button>
+            <button class="icon-btn" title="Call">📞</button>
+            <button class="icon-btn" title="Search">⌕</button>
+            <button class="icon-btn" title="Menu">⋮</button>
+          </div>
+        </header>
+
+        <div class="chat-body" id="chatBody">
+          <div class="day-pill">Today</div>
+          <div class="msg incoming float-in">
+            <p>Hey! Have you checked the new UI preview?</p>
+            <time>10:18</time>
+          </div>
+          <div class="msg outgoing float-in delay-1">
+            <p>Yes! It looks super clean and modern ✨</p>
+            <time>10:19 <span>✓✓</span></time>
+          </div>
+          <div class="msg incoming float-in delay-2">
+            <p>Awesome. Let's ship a mock layout today.</p>
+            <time>10:22</time>
+          </div>
+          <div class="msg outgoing float-in delay-3">
+            <p>On it 🚀</p>
+            <time>10:24 <span>✓✓</span></time>
+          </div>
+        </div>
+
+        <footer class="composer glass">
+          <button class="icon-btn">😊</button>
+          <button class="icon-btn">📎</button>
+          <input type="text" placeholder="Type a message" />
+          <button class="mic-btn pulse">🎤</button>
+        </footer>
+      </section>
+
+      <aside class="settings-panel glass">
+        <div class="settings-head">
+          <h2>Appearance</h2>
+          <p>Customize your WhatsApp-like experience</p>
+        </div>
+
+        <div class="option-block">
+          <h4>Theme Mode</h4>
+          <div class="toggle-group">
+            <button class="mode-btn active" data-theme="dark">Dark</button>
+            <button class="mode-btn" data-theme="light">Light</button>
+            <button class="mode-btn" data-theme="midnight">Midnight</button>
+          </div>
+        </div>
+
+        <div class="option-block">
+          <h4>Accent Color</h4>
+          <div class="swatches">
+            <button class="swatch active" style="--sw:#00a884" data-accent="#00a884"></button>
+            <button class="swatch" style="--sw:#4f46e5" data-accent="#4f46e5"></button>
+            <button class="swatch" style="--sw:#f97316" data-accent="#f97316"></button>
+            <button class="swatch" style="--sw:#ec4899" data-accent="#ec4899"></button>
+            <button class="swatch" style="--sw:#22c55e" data-accent="#22c55e"></button>
+          </div>
+        </div>
+
+        <div class="option-block">
+          <h4>Animated Icons</h4>
+          <label class="switch">
+            <input type="checkbox" id="animToggle" checked />
+            <span class="slider"></span>
+            <span>Enable micro-interactions</span>
+          </label>
+        </div>
+
+        <div class="option-block">
+          <h4>Wallpaper Overlay</h4>
+          <label class="range-wrap">
+            <input id="opacityRange" type="range" min="5" max="45" value="20" />
+            <span id="opacityVal">20%</span>
+          </label>
+        </div>
+      </aside>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
