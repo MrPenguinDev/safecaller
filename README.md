@@ -7,6 +7,7 @@ SafeCaller now runs with a **real-data phone-first flow** (no placeholder contac
 - Add contacts by verified phone identity.
 - Call contacts directly using WebRTC signaling by phone identity.
 - Show real activity feed from stored signaling/auth/contact events.
+- AI chat panel with **OpenAI-compatible API config** and one-click presets for **OpenRouter, Gemini, and ChatGPT**.
 
 ## Stack
 

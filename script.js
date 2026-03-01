@@ -32,11 +32,20 @@ const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
 const callStatus = document.getElementById('callStatus');
 
+const aiStatus = document.getElementById('aiStatus');
+const presetOpenRouter = document.getElementById('presetOpenRouter');
+const presetGemini = document.getElementById('presetGemini');
+const presetChatgpt = document.getElementById('presetChatgpt');
+const aiBaseUrl = document.getElementById('aiBaseUrl');
+const aiModel = document.getElementById('aiModel');
+const aiApiKey = document.getElementById('aiApiKey');
+const aiSystemPrompt = document.getElementById('aiSystemPrompt');
+const aiMessages = document.getElementById('aiMessages');
+const aiInput = document.getElementById('aiInput');
+const aiSendBtn = document.getElementById('aiSendBtn');
+
 const rtcConfig = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' }
-  ]
+  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }]
 };
 
 let socket;
@@ -48,6 +57,7 @@ let selectedContactFullPhone = '';
 let currentPeer = '';
 let allContacts = [];
 let allDirectory = [];
+const aiConversation = [];
 
 const fmtTime = (value) => new Date(value).toLocaleString();
 
@@ -83,6 +93,10 @@ function setStatus(message) {
   callStatus.textContent = message;
 }
 
+function setAiStatus(message) {
+  aiStatus.textContent = message;
+}
+
 function sanitizePhone(value) {
   return String(value || '').replace(/\D/g, '');
 }
@@ -102,6 +116,34 @@ function api(path, options = {}) {
       ...(options.headers || {})
     }
   });
+}
+
+function appendAiMessage(role, text) {
+  const node = document.createElement('div');
+  node.className = `msg ${role === 'user' ? 'outgoing' : 'incoming'}`;
+  node.innerHTML = `<p><strong>${role}</strong> ${text}</p>`;
+  aiMessages.appendChild(node);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+
+function setAiPreset(kind) {
+  if (kind === 'openrouter') {
+    aiBaseUrl.value = 'https://openrouter.ai/api/v1';
+    aiModel.value = 'openai/gpt-4o-mini';
+    setAiStatus('Preset loaded: OpenRouter. Add your OpenRouter API key.');
+    return;
+  }
+
+  if (kind === 'gemini') {
+    aiBaseUrl.value = 'https://generativelanguage.googleapis.com/v1beta/openai';
+    aiModel.value = 'gemini-1.5-flash';
+    setAiStatus('Preset loaded: Gemini (OpenAI-compatible endpoint). Add your Gemini API key.');
+    return;
+  }
+
+  aiBaseUrl.value = 'https://api.openai.com/v1';
+  aiModel.value = 'gpt-4o-mini';
+  setAiStatus('Preset loaded: ChatGPT. Add your OpenAI API key.');
 }
 
 function makeContactCard(user, source) {
@@ -137,8 +179,8 @@ function renderContacts() {
   contactsList.innerHTML = '';
   const q = directorySearch.value.trim().toLowerCase();
 
-  const contacts = allContacts.filter((user) =>
-    !q || user.name.toLowerCase().includes(q) || user.fullPhone.toLowerCase().includes(q)
+  const contacts = allContacts.filter(
+    (user) => !q || user.name.toLowerCase().includes(q) || user.fullPhone.toLowerCase().includes(q)
   );
 
   const directoryOnly = allDirectory
@@ -165,7 +207,9 @@ function renderActivity(events) {
     const direction = event.actor === profile.fullPhone || event.from === profile.fullPhone ? 'outgoing' : 'incoming';
     const node = document.createElement('div');
     node.className = `msg ${direction}`;
-    node.innerHTML = `<p><strong>${event.type}</strong> ${event.to || event.target || ''}</p><time>${fmtTime(event.timestamp || Date.now())}</time>`;
+    node.innerHTML = `<p><strong>${event.type}</strong> ${event.to || event.target || ''}</p><time>${fmtTime(
+      event.timestamp || Date.now()
+    )}</time>`;
     activityFeed.appendChild(node);
   });
 }
@@ -334,6 +378,61 @@ async function addContact() {
   await refreshData();
 }
 
+async function sendAiMessage() {
+  const userMessage = aiInput.value.trim();
+  if (!userMessage) return;
+
+  const baseUrl = aiBaseUrl.value.trim().replace(/\/$/, '');
+  const model = aiModel.value.trim();
+  const apiKey = aiApiKey.value.trim();
+
+  if (!baseUrl || !model || !apiKey) {
+    setAiStatus('Base URL, model, and API key are required.');
+    return;
+  }
+
+  aiInput.value = '';
+  appendAiMessage('user', userMessage);
+
+  aiConversation.push({ role: 'user', content: userMessage });
+
+  const systemPrompt = aiSystemPrompt.value.trim();
+  const messages = [];
+  if (systemPrompt) {
+    messages.push({ role: 'system', content: systemPrompt });
+  }
+  messages.push(...aiConversation);
+
+  setAiStatus('Thinking...');
+
+  try {
+    const response = await fetch(`${baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({ model, messages, temperature: 0.7 })
+    });
+
+    const payload = await response.json();
+    if (!response.ok) {
+      const errorText = payload?.error?.message || payload?.message || 'AI request failed.';
+      appendAiMessage('assistant', `Error: ${errorText}`);
+      setAiStatus('Request failed. Check your config and key.');
+      return;
+    }
+
+    const answer = payload?.choices?.[0]?.message?.content || 'No response text was returned by provider.';
+    aiConversation.push({ role: 'assistant', content: answer });
+    appendAiMessage('assistant', answer);
+    setAiStatus('Response received.');
+  } catch (error) {
+    appendAiMessage('assistant', `Error: ${error.message}`);
+    setAiStatus('Network error while reaching AI provider.');
+  }
+}
+
 requestOtpBtn.addEventListener('click', requestOtp);
 verifyOtpBtn.addEventListener('click', verifyOtp);
 addContactBtn.addEventListener('click', addContact);
@@ -354,4 +453,15 @@ hangupBtn.addEventListener('click', async () => {
   await sendCallSignal({ type: 'hangup' });
   setStatus('Call ended.');
   await refreshData();
+});
+
+presetOpenRouter.addEventListener('click', () => setAiPreset('openrouter'));
+presetGemini.addEventListener('click', () => setAiPreset('gemini'));
+presetChatgpt.addEventListener('click', () => setAiPreset('chatgpt'));
+aiSendBtn.addEventListener('click', sendAiMessage);
+aiInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    sendAiMessage();
+  }
 });

@@ -635,3 +635,46 @@ body {
 #contactCountryCodeInput {
   max-width: 120px;
 }
+
+.ai-panel {
+  margin-top: 4px;
+}
+
+.ai-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ai-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.ai-messages {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--surface), transparent 20%);
+  min-height: 140px;
+  max-height: 220px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.ai-messages .msg {
+  max-width: 85%;
+}
+
+.ai-send-row {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  .ai-config-grid {
+    grid-template-columns: 1fr;
+  }
+}
