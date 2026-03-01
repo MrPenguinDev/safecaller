@@ -86,6 +86,35 @@
             </div>
           </div>
         </section>
+
+        <section class="webrtc-panel glass ai-panel">
+          <div class="webrtc-top">
+            <h4>AI Chat</h4>
+            <small id="aiStatus">Configure a provider preset and start chatting.</small>
+          </div>
+
+          <div class="ai-presets">
+            <button id="presetOpenRouter" class="chip">OpenRouter</button>
+            <button id="presetGemini" class="chip">Gemini</button>
+            <button id="presetChatgpt" class="chip">ChatGPT</button>
+          </div>
+
+          <div class="webrtc-controls ai-config-grid">
+            <input id="aiBaseUrl" type="text" placeholder="Base URL (OpenAI compatible)" value="https://api.openai.com/v1" />
+            <input id="aiModel" type="text" placeholder="Model (example: gpt-4o-mini)" value="gpt-4o-mini" />
+            <input id="aiApiKey" type="password" placeholder="API key" />
+            <input id="aiSystemPrompt" type="text" placeholder="System prompt (optional)" value="You are a helpful assistant." />
+          </div>
+
+          <div id="aiMessages" class="ai-messages">
+            <div class="msg incoming"><p><strong>assistant</strong> Ready when you are.</p></div>
+          </div>
+
+          <div class="webrtc-controls ai-send-row">
+            <input id="aiInput" type="text" placeholder="Ask any AI..." />
+            <button id="aiSendBtn" class="chip active">Send</button>
+          </div>
+        </section>
       </section>
 
       <aside class="settings-panel glass">
