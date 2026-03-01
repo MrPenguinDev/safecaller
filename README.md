@@ -50,3 +50,5 @@ Open `http://localhost:3000`.
 3. User A adds User B by country code + phone.
 4. User A selects User B and initiates call.
 5. WebSocket relay forwards signaling payloads to online target.
+
+## Please report a bug when you find it
