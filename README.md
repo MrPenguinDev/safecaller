@@ -53,3 +53,7 @@ Open `http://localhost:3000`.
 5. WebSocket relay forwards signaling payloads to online target.
 
 ## Please report a bug when you find it
+
+## License
+
+This project is licensed under the **SafeCaller Custom License 1.0** (non-commercial by default). See `LICENSE`.

@@ -13,7 +13,7 @@
     "signaling",
     "node"
   ],
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "express": "^4.21.2",
     "ws": "^8.18.0",
