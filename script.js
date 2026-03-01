@@ -121,7 +121,14 @@ function api(path, options = {}) {
 function appendAiMessage(role, text) {
   const node = document.createElement('div');
   node.className = `msg ${role === 'user' ? 'outgoing' : 'incoming'}`;
-  node.innerHTML = `<p><strong>${role}</strong> ${text}</p>`;
+
+  const paragraph = document.createElement('p');
+  const roleLabel = document.createElement('strong');
+  roleLabel.textContent = role;
+  paragraph.appendChild(roleLabel);
+  paragraph.appendChild(document.createTextNode(` ${text}`));
+
+  node.appendChild(paragraph);
   aiMessages.appendChild(node);
   aiMessages.scrollTop = aiMessages.scrollHeight;
 }
