@@ -468,3 +468,170 @@ body {
   .app-shell { grid-template-columns: 1fr; padding: 8px; }
   .sidebar { display: none; }
 }
+
+.webrtc-panel {
+  margin: 0 14px 12px;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.webrtc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.webrtc-top h4 {
+  margin: 0;
+}
+
+.webrtc-top small {
+  color: var(--muted);
+}
+
+.webrtc-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.webrtc-controls input {
+  flex: 1;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  padding: 8px;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.video-grid label {
+  display: block;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+  color: var(--muted);
+}
+
+.video-grid video {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #000;
+  min-height: 120px;
+  object-fit: cover;
+}
+
+
+@media (max-width: 1100px) {
+  .webrtc-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.auth-card {
+  position: fixed;
+  z-index: 30;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(760px, calc(100vw - 24px));
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.auth-card h2,
+.auth-card p {
+  margin: 0;
+}
+
+.auth-card p {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.auth-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1.2fr .6fr 1fr .8fr;
+  gap: 8px;
+}
+
+.auth-grid input {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  padding: 8px;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#authHint {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.user-badge {
+  font-size: 0.72rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+
+.contact-selected,
+.contact-result {
+  margin: 0 0 8px;
+  font-size: 0.84rem;
+}
+
+.contact-selected {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.contact-result {
+  color: var(--muted);
+}
+
+@media (max-width: 1100px) {
+  .auth-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.empty-list {
+  margin: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+#activityFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#contactCountryCodeInput {
+  max-width: 120px;
+}

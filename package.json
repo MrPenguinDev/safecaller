@@ -1,0 +1,23 @@
+{
+  "name": "safecaller",
+  "version": "1.0.0",
+  "description": "SafeCaller UI + encrypted WebRTC signaling backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "webrtc",
+    "signaling",
+    "node"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0",
+    "dotenv": "^16.4.7",
+    "mongodb": "^6.13.0"
+  }
+}

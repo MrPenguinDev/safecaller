@@ -3,140 +3,95 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WhatsApp Web Layout Clone</title>
+    <title>SafeCaller</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="ambient"></div>
+    <section id="authCard" class="auth-card glass">
+      <h2>Sign in to SafeCaller</h2>
+      <p>Real profile only: name + country code + phone + OTP.</p>
+      <div class="auth-grid">
+        <input id="authName" type="text" placeholder="Full name" />
+        <input id="authCountryCode" type="text" placeholder="Country code" value="+1" />
+        <input id="authPhone" type="text" placeholder="Phone number" />
+        <input id="authOtp" type="text" placeholder="OTP" />
+      </div>
+      <div class="auth-actions">
+        <button id="requestOtpBtn" class="chip active">Request OTP</button>
+        <button id="verifyOtpBtn" class="chip">Verify OTP</button>
+      </div>
+      <small id="authHint">Enter details, request OTP, then verify.</small>
+    </section>
+
     <main class="app-shell">
       <aside class="sidebar">
         <header class="profile-bar glass">
           <div class="avatar online">SC</div>
           <div class="actions">
-            <button class="icon-btn pulse" title="Status">
-              <span>◉</span>
-            </button>
-            <button class="icon-btn" title="New Chat">
-              <span>✚</span>
-            </button>
-            <button class="icon-btn" title="Menu">
-              <span>⋮</span>
-            </button>
+            <span id="userBadge" class="user-badge">Guest</span>
           </div>
         </header>
 
         <div class="search-wrap glass">
           <span class="search-icon">⌕</span>
-          <input type="text" placeholder="Search or start new chat" />
-          <button class="filter-btn" title="Filter">⛃</button>
+          <input id="directorySearch" type="text" placeholder="Search real users directory" />
         </div>
 
         <nav class="chat-filter">
-          <button class="chip active">All</button>
-          <button class="chip">Unread</button>
-          <button class="chip">Groups</button>
-          <button class="chip">Archived</button>
+          <button class="chip active">Contacts</button>
+          <button class="chip">Directory</button>
         </nav>
 
-        <section class="chat-list">
-          <article class="chat-card active">
-            <div class="avatar teal">A</div>
-            <div class="chat-meta">
-              <h4>Alex Johnson</h4>
-              <p><span class="tick">✓✓</span> Let's meet at 8 PM.</p>
-            </div>
-            <div class="chat-side">
-              <time>10:24</time>
-              <span class="badge">3</span>
-            </div>
-          </article>
-
-          <article class="chat-card">
-            <div class="avatar purple">W</div>
-            <div class="chat-meta">
-              <h4>Work Squad</h4>
-              <p>Maria: Updated project deck shared.</p>
-            </div>
-            <div class="chat-side">
-              <time>09:56</time>
-              <span class="mute">🔕</span>
-            </div>
-          </article>
-
-          <article class="chat-card">
-            <div class="avatar orange">F</div>
-            <div class="chat-meta">
-              <h4>Family</h4>
-              <p>Dad: Dinner is ready 🍲</p>
-            </div>
-            <div class="chat-side">
-              <time>Yesterday</time>
-            </div>
-          </article>
-
-          <article class="chat-card">
-            <div class="avatar pink">L</div>
-            <div class="chat-meta">
-              <h4>Lisa</h4>
-              <p>Typing…</p>
-            </div>
-            <div class="chat-side">
-              <time>Yesterday</time>
-              <span class="badge muted">1</span>
-            </div>
-          </article>
-        </section>
+        <section class="chat-list" id="contactsList"></section>
       </aside>
 
       <section class="chat-window">
         <header class="chat-header glass">
           <div class="left">
-            <div class="avatar teal">A</div>
+            <div class="avatar teal">☎</div>
             <div>
-              <h3>Alex Johnson</h3>
-              <small>online</small>
+              <h3 id="selectedContactTitle">No contact selected</h3>
+              <small id="selectedContactSub">Add a real contact to begin.</small>
             </div>
           </div>
           <div class="actions">
-            <button class="icon-btn" title="Video">📹</button>
-            <button class="icon-btn" title="Call">📞</button>
-            <button class="icon-btn" title="Search">⌕</button>
-            <button class="icon-btn" title="Menu">⋮</button>
+            <button class="icon-btn" id="startCallBtn" title="Start call">📹</button>
+            <button class="icon-btn" id="hangupBtn" title="Hang up">📞</button>
           </div>
         </header>
 
-        <div class="chat-body" id="chatBody">
-          <div class="day-pill">Today</div>
-          <div class="msg incoming float-in">
-            <p>Hey! Have you checked the new UI preview?</p>
-            <time>10:18</time>
-          </div>
-          <div class="msg outgoing float-in delay-1">
-            <p>Yes! It looks super clean and modern ✨</p>
-            <time>10:19 <span>✓✓</span></time>
-          </div>
-          <div class="msg incoming float-in delay-2">
-            <p>Awesome. Let's ship a mock layout today.</p>
-            <time>10:22</time>
-          </div>
-          <div class="msg outgoing float-in delay-3">
-            <p>On it 🚀</p>
-            <time>10:24 <span>✓✓</span></time>
-          </div>
-        </div>
+        <div class="chat-body" id="activityFeed"></div>
 
-        <footer class="composer glass">
-          <button class="icon-btn">😊</button>
-          <button class="icon-btn">📎</button>
-          <input type="text" placeholder="Type a message" />
-          <button class="mic-btn pulse">🎤</button>
-        </footer>
+        <section class="webrtc-panel glass">
+          <div class="webrtc-top">
+            <h4>Verified Contact Lookup</h4>
+            <small id="callStatus">Sign in to continue</small>
+          </div>
+          <div class="webrtc-controls">
+            <input id="contactCountryCodeInput" type="text" value="+1" placeholder="Country code" />
+            <input id="contactPhoneInput" type="text" placeholder="Contact phone number" />
+            <button id="addContactBtn" class="chip active">Add Contact</button>
+          </div>
+          <p id="selectedContactLabel" class="contact-selected">No contact selected</p>
+          <p id="contactResult" class="contact-result">Add real registered users only.</p>
+          <div class="video-grid">
+            <div>
+              <label>Your stream</label>
+              <video id="localVideo" autoplay playsinline muted></video>
+            </div>
+            <div>
+              <label>Remote stream</label>
+              <video id="remoteVideo" autoplay playsinline></video>
+            </div>
+          </div>
+        </section>
       </section>
 
       <aside class="settings-panel glass">
         <div class="settings-head">
           <h2>Appearance</h2>
-          <p>Customize your WhatsApp-like experience</p>
+          <p>Customize your experience</p>
         </div>
 
         <div class="option-block">
