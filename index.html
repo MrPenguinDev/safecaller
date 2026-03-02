@@ -10,7 +10,11 @@
     <div class="ambient"></div>
     <section id="authCard" class="auth-card glass">
       <h2>Sign in to SafeCaller</h2>
-      <p>Real profile only: name + country code + phone + OTP.</p>
+      <p id="authModeHint">Create account: name + country code + phone + OTP.</p>
+      <div class="auth-actions">
+        <button id="signupModeBtn" class="chip active">Sign up</button>
+        <button id="loginModeBtn" class="chip">Login</button>
+      </div>
       <div class="auth-grid">
         <input id="authName" type="text" placeholder="Full name" />
         <input id="authCountryCode" type="text" placeholder="Country code" value="+1" />
