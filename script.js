@@ -8,9 +8,17 @@ const opacityVal = document.getElementById('opacityVal');
 const authCard = document.getElementById('authCard');
 const requestOtpBtn = document.getElementById('requestOtpBtn');
 const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+const showLoginPageBtn = document.getElementById('showLoginPageBtn');
+const showSignupPageBtn = document.getElementById('showSignupPageBtn');
+const loginPage = document.getElementById('loginPage');
+const signupPage = document.getElementById('signupPage');
+const loginActions = document.getElementById('loginActions');
+const signupActions = document.getElementById('signupActions');
 const authName = document.getElementById('authName');
 const authCountryCode = document.getElementById('authCountryCode');
 const authPhone = document.getElementById('authPhone');
+const signupCountryCode = document.getElementById('signupCountryCode');
+const signupPhone = document.getElementById('signupPhone');
 const authOtp = document.getElementById('authOtp');
 const authHint = document.getElementById('authHint');
 const userBadge = document.getElementById('userBadge');
@@ -60,6 +68,22 @@ let allDirectory = [];
 const aiConversation = [];
 
 const fmtTime = (value) => new Date(value).toLocaleString();
+
+let authPage = 'login';
+
+function setAuthPage(page) {
+  authPage = page;
+  const isLogin = page === 'login';
+  showLoginPageBtn.classList.toggle('active', isLogin);
+  showSignupPageBtn.classList.toggle('active', !isLogin);
+  loginPage.classList.toggle('active', isLogin);
+  signupPage.classList.toggle('active', !isLogin);
+  loginActions.classList.toggle('hidden', !isLogin);
+  signupActions.classList.toggle('hidden', isLogin);
+  authHint.textContent = isLogin
+    ? 'Enter OTP from Sign Up and verify to continue.'
+    : 'Create account details and request OTP.';
+}
 
 modeButtons.forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -233,13 +257,21 @@ async function refreshData() {
 async function requestOtp() {
   const payload = {
     name: authName.value.trim(),
-    countryCode: normalizeCountryCode(authCountryCode.value),
-    phone: sanitizePhone(authPhone.value)
+    countryCode: normalizeCountryCode(signupCountryCode.value),
+    phone: sanitizePhone(signupPhone.value)
   };
 
   const response = await api('/auth/request-otp', { method: 'POST', body: JSON.stringify(payload) });
   const data = await response.json();
-  authHint.textContent = response.ok ? `OTP sent. Dev OTP: ${data.devOtp}` : data.error || 'OTP request failed.';
+  if (response.ok) {
+    authCountryCode.value = payload.countryCode;
+    authPhone.value = payload.phone;
+    authHint.textContent = `OTP sent. Dev OTP: ${data.devOtp}. Now verify on Login page.`;
+    setAuthPage('login');
+    return;
+  }
+
+  authHint.textContent = data.error || 'OTP request failed.';
 }
 
 async function verifyOtp() {
@@ -433,6 +465,8 @@ async function sendAiMessage() {
   }
 }
 
+showLoginPageBtn.addEventListener('click', () => setAuthPage('login'));
+showSignupPageBtn.addEventListener('click', () => setAuthPage('signup'));
 requestOtpBtn.addEventListener('click', requestOtp);
 verifyOtpBtn.addEventListener('click', verifyOtp);
 addContactBtn.addEventListener('click', addContact);
@@ -465,3 +499,5 @@ aiInput.addEventListener('keydown', (event) => {
     sendAiMessage();
   }
 });
+
+setAuthPage("login");

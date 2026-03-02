@@ -9,19 +9,38 @@
   <body>
     <div class="ambient"></div>
     <section id="authCard" class="auth-card glass">
-      <h2>Sign in to SafeCaller</h2>
-      <p>Real profile only: name + country code + phone + OTP.</p>
-      <div class="auth-grid">
-        <input id="authName" type="text" placeholder="Full name" />
-        <input id="authCountryCode" type="text" placeholder="Country code" value="+1" />
-        <input id="authPhone" type="text" placeholder="Phone number" />
-        <input id="authOtp" type="text" placeholder="OTP" />
+      <div class="auth-tabs">
+        <button id="showLoginPageBtn" class="chip active" type="button">Login</button>
+        <button id="showSignupPageBtn" class="chip" type="button">Sign Up</button>
       </div>
-      <div class="auth-actions">
+
+      <div id="loginPage" class="auth-page active">
+        <h2>Login to SafeCaller</h2>
+        <p>Already have OTP? Verify and continue.</p>
+        <div class="auth-grid login-grid">
+          <input id="authCountryCode" type="text" placeholder="Country code" value="+1" />
+          <input id="authPhone" type="text" placeholder="Phone number" />
+          <input id="authOtp" type="text" placeholder="OTP" />
+        </div>
+      </div>
+
+      <div id="signupPage" class="auth-page">
+        <h2>Create SafeCaller account</h2>
+        <p>Use real identity details to request an OTP.</p>
+        <div class="auth-grid signup-grid">
+          <input id="authName" type="text" placeholder="Full name" />
+          <input id="signupCountryCode" type="text" placeholder="Country code" value="+1" />
+          <input id="signupPhone" type="text" placeholder="Phone number" />
+        </div>
+      </div>
+
+      <div class="auth-actions" id="loginActions">
+        <button id="verifyOtpBtn" class="chip active">Verify OTP</button>
+      </div>
+      <div class="auth-actions hidden" id="signupActions">
         <button id="requestOtpBtn" class="chip active">Request OTP</button>
-        <button id="verifyOtpBtn" class="chip">Verify OTP</button>
       </div>
-      <small id="authHint">Enter details, request OTP, then verify.</small>
+      <small id="authHint">Switch to Sign Up to request OTP, then verify on Login.</small>
     </section>
 
     <main class="app-shell">
