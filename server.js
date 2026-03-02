@@ -194,19 +194,33 @@ async function addContact(ownerFullPhone, contactFullPhone) {
 app.post('/auth/request-otp', async (req, res) => {
   runtimeStats.authRequests += 1;
 
+  const mode = String(req.body?.mode || 'signup').toLowerCase() === 'login' ? 'login' : 'signup';
   const name = String(req.body?.name || '').trim();
   const countryCode = normalizeCountryCode(req.body?.countryCode);
   const phone = sanitizePhone(req.body?.phone);
+  const fullPhone = `${countryCode}${phone}`;
 
-  if (!name || !countryCode || phone.length < 8) {
-    return res.status(400).json({ error: 'name, countryCode, and valid phone are required.' });
+  if (!countryCode || phone.length < 8) {
+    return res.status(400).json({ error: 'countryCode and valid phone are required.' });
+  }
+
+  if (mode === 'signup' && !name) {
+    return res.status(400).json({ error: 'name is required for sign up.' });
+  }
+
+  const existingUser = await getUserByFullPhone(fullPhone);
+  if (mode === 'login' && !existingUser) {
+    return res.status(404).json({ error: 'User not found. Please sign up first.' });
+  }
+  if (mode === 'signup' && existingUser) {
+    return res.status(409).json({ error: 'User already exists. Please login instead.' });
   }
 
   const otp = String(Math.floor(100000 + Math.random() * 900000));
-  const fullPhone = `${countryCode}${phone}`;
 
   otpStore.set(fullPhone, {
-    name,
+    mode,
+    name: mode === 'login' ? existingUser.name : name,
     countryCode,
     phone,
     fullPhone,

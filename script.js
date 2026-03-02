@@ -8,6 +8,9 @@ const opacityVal = document.getElementById('opacityVal');
 const authCard = document.getElementById('authCard');
 const requestOtpBtn = document.getElementById('requestOtpBtn');
 const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+const signupModeBtn = document.getElementById('signupModeBtn');
+const loginModeBtn = document.getElementById('loginModeBtn');
+const authModeHint = document.getElementById('authModeHint');
 const authName = document.getElementById('authName');
 const authCountryCode = document.getElementById('authCountryCode');
 const authPhone = document.getElementById('authPhone');
@@ -58,6 +61,7 @@ let currentPeer = '';
 let allContacts = [];
 let allDirectory = [];
 const aiConversation = [];
+let authMode = 'signup';
 
 const fmtTime = (value) => new Date(value).toLocaleString();
 
@@ -105,6 +109,18 @@ function normalizeCountryCode(value) {
   const trimmed = String(value || '').trim();
   if (!trimmed) return '';
   return trimmed.startsWith('+') ? trimmed : `+${trimmed}`;
+}
+
+function setAuthMode(mode) {
+  authMode = mode;
+  const isLogin = mode === 'login';
+  signupModeBtn.classList.toggle('active', !isLogin);
+  loginModeBtn.classList.toggle('active', isLogin);
+  authName.classList.toggle('hidden', isLogin);
+  authName.disabled = isLogin;
+  authModeHint.textContent = isLogin
+    ? 'Login with country code + phone + OTP.'
+    : 'Create account: name + country code + phone + OTP.';
 }
 
 function api(path, options = {}) {
@@ -232,6 +248,7 @@ async function refreshData() {
 
 async function requestOtp() {
   const payload = {
+    mode: authMode,
     name: authName.value.trim(),
     countryCode: normalizeCountryCode(authCountryCode.value),
     phone: sanitizePhone(authPhone.value)
@@ -436,6 +453,8 @@ async function sendAiMessage() {
 requestOtpBtn.addEventListener('click', requestOtp);
 verifyOtpBtn.addEventListener('click', verifyOtp);
 addContactBtn.addEventListener('click', addContact);
+signupModeBtn.addEventListener('click', () => setAuthMode('signup'));
+loginModeBtn.addEventListener('click', () => setAuthMode('login'));
 
 startCallBtn.addEventListener('click', async () => {
   if (!selectedContactFullPhone) return setStatus('Select a real contact first.');
@@ -465,3 +484,5 @@ aiInput.addEventListener('keydown', (event) => {
     sendAiMessage();
   }
 });
+
+setAuthMode('signup');
