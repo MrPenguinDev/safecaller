@@ -71,7 +71,8 @@ const fmtTime = (value) => new Date(value).toLocaleString();
 
 let authPage = 'login';
 
-function setAuthPage(page) {
+function setAuthPage(page, options = {}) {
+  const { preserveHint = false } = options;
   authPage = page;
   const isLogin = page === 'login';
   showLoginPageBtn.classList.toggle('active', isLogin);
@@ -80,9 +81,11 @@ function setAuthPage(page) {
   signupPage.classList.toggle('active', !isLogin);
   loginActions.classList.toggle('hidden', !isLogin);
   signupActions.classList.toggle('hidden', isLogin);
-  authHint.textContent = isLogin
-    ? 'Enter OTP from Sign Up and verify to continue.'
-    : 'Create account details and request OTP.';
+  if (!preserveHint) {
+    authHint.textContent = isLogin
+      ? 'Enter OTP from Sign Up and verify to continue.'
+      : 'Create account details and request OTP.';
+  }
 }
 
 modeButtons.forEach((btn) => {
@@ -267,7 +270,7 @@ async function requestOtp() {
     authCountryCode.value = payload.countryCode;
     authPhone.value = payload.phone;
     authHint.textContent = `OTP sent. Dev OTP: ${data.devOtp}. Now verify on Login page.`;
-    setAuthPage('login');
+    setAuthPage('login', { preserveHint: true });
     return;
   }
 
